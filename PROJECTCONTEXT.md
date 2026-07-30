@@ -112,7 +112,7 @@ DayQuest should feel responsive and rewarding, not noisy. Every meaningful actio
 
 ## Initial domain entities
 
-These are conceptual boundaries for future design, not an implemented database schema:
+These boundaries are now represented by the initial Prisma domain schema:
 
 - **User profile**: application identity, display preferences, time zone, and progression summary
 - **Mission**: user-owned task definition with schedule, priority, state, and optional recurrence
@@ -154,7 +154,7 @@ Supabase provides authentication. Sessions use server-managed cookies refreshed 
 
 ## Current milestone
 
-Foundation and product-definition phase: rename and document DayQuest, validate the production starter, retain the authentication examples, and establish product, accessibility, architecture, and security constraints before planner implementation begins.
+Domain-foundation phase: the initial planner, progression, focus, and achievement schema is defined and documented while authentication examples remain unchanged. APIs, planner interfaces, and domain automation have not been implemented.
 
 ## Completed work
 
@@ -163,14 +163,17 @@ Foundation and product-definition phase: rename and document DayQuest, validate 
 - Central security baseline, validation, logging, health endpoint, tests, and continuous integration established
 - DayQuest package metadata, application metadata, foundation homepage copy, and project documentation defined
 - Generated and local environment paths excluded from version control
+- Initial Prisma domain models and enums established for profiles, plans, tasks, recurrence, focus, XP, streak summaries, and achievements
+- Idempotent system-achievement seed data defined without fake users or Supabase dependencies
+- Database date/time conventions, indexes, uniqueness, history preservation, and deletion behavior documented
 
 ## Immediate next steps
 
-1. Validate authentication redirects, cookie handling, protected routes, and role behaviour in the target Supabase environment.
-2. Define MVP information architecture, interaction states, accessibility acceptance criteria, and responsive layouts.
-3. Document time-zone, recurrence, XP reversal, streak, achievement, and focus-session rules with testable examples.
-4. Design and review the planner domain schema and authorisation boundaries before creating migrations.
-5. Implement daily planning as the first vertical slice with tests, then expand toward weekly planning and progression.
+1. Review and apply the domain-foundation migration to each controlled environment.
+2. Validate authentication redirects, cookie handling, protected routes, role behaviour, and user-profile provisioning in the target Supabase environment.
+3. Specify time-zone conversion, recurrence, XP reversal, streak, achievement, and focus-session behavior with testable examples.
+4. Implement authenticated daily-planning services and API contracts with ownership checks and transactional writes.
+5. Build the accessible daily-planning interface as the first vertical slice, then expand toward weekly planning and progression.
 
 ## Risks and architectural decisions
 
@@ -183,4 +186,4 @@ Foundation and product-definition phase: rename and document DayQuest, validate 
 - **Rate limiting:** The current limiter is process-local and is unsuitable for horizontally scaled production; adopt a distributed store before that deployment topology.
 - **CSP:** The final asset and integration surface is not known yet; define and test a restrictive Content Security Policy before launch.
 - **Scope control:** Social, leaderboard, AI scheduling, and marketplace capabilities remain outside the initial MVP to protect delivery focus.
-- **Schema timing:** Domain entities are intentionally conceptual during the foundation milestone; implement migrations only after product rules and security boundaries are reviewed.
+- **Schema evolution:** The initial domain schema deliberately excludes automation and advanced recurrence structures. Evolve it only through reviewed migrations as product rules and service boundaries become concrete.
