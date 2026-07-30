@@ -14,4 +14,12 @@ The initial domain layer models user profiles, daily plans, tasks and categories
 
 Domain mutations should live in service modules introduced with their API use cases, not in route handlers. Those services will enforce cross-user ownership, date/time validation, recurrence invariants, and atomic/idempotent progression updates. No generation, evaluation, or reward-calculation behavior is part of the schema milestone.
 
+## Task application layer
+
+Task management uses four boundaries: route handlers authenticate and shape HTTP responses; strict Zod schemas validate untrusted input; `TaskService` owns task, daily-plan, reward, transition, and ownership rules; `TaskRepository` is the only task-layer Prisma access. Public mappers remove `userId`, daily-plan identifiers, recurrence metadata, and database relation details while formatting dates and timestamps consistently.
+
+The API surface is `GET/POST /api/tasks`, `GET/PATCH/DELETE /api/tasks/[id]`, `POST /api/tasks/[id]/complete`, `POST /api/tasks/[id]/reopen`, `POST /api/tasks/reorder`, and `GET/POST /api/task-categories`. Every route verifies the Supabase user server-side. Repository queries include the authenticated user ID, so missing and cross-user resources share the same `404` contract.
+
+Task creation and date moves transactionally upsert the user's unique daily plan and keep `scheduledDate` aligned with it. Completion and reopen run at serializable isolation, conditionally change task state, append immutable XP ledger entries, and update cached progress. Completed tasks cannot be deleted in this version. Mutating routes use the existing process-local rate limiter; horizontally scaled deployment still requires the distributed adapter described in the security baseline.
+
 API routes should remain thin: validate input, authorize, apply rate limits, call a service, and serialize through shared response helpers. The in-memory limiter suits local or single-instance deployments; distributed deployments can replace its implementation without changing route contracts.

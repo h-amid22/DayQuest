@@ -20,6 +20,8 @@ A user-owned container for one local calendar date, with an optional daily goal 
 
 A scheduled mission instance. It belongs to one user and may reference a daily plan, category, or originating recurring definition. `status` is the sole task-completion state; overdue or missed state is derived rather than stored. `xpReward` is captured on each task so later reward-rule changes do not alter history. Deleting an optional parent clears the relevant reference. Deleting a task clears its optional focus-session and XP-transaction references while preserving those historical records.
 
+The first task API blocks deletion once a task is completed, even though the database can preserve a nullable XP source reference. This conservative application rule keeps completed mission history directly attributable. Creating or moving a task upserts the unique `[userId, date]` daily plan and updates both task date and plan link atomically.
+
 ### RecurringTask
 
 A user-owned recurrence template, not a completed task. Frequency and interval provide the base cadence. Weekly rules use `daysOfWeek`; monthly rules use `dayOfMonth`. Nullable fields keep the MVP model simple. Generated occurrences are ordinary `Task` records linked through `recurringTaskId`. Deleting a definition clears that link without deleting generated tasks. Generation logic is intentionally not implemented yet.
@@ -31,6 +33,8 @@ A one-to-one, user-owned cached summary of total XP, current level, current and 
 ### XPTransaction
 
 An immutable, user-owned XP ledger entry. `amount` is a signed integer, allowing awards and reversals. The type and stable internal `reason` describe why it occurred; optional JSON metadata carries structured context. Optional task, focus-session, and achievement links use `SetNull`, so deleting those records does not destroy XP history. There is intentionally no `updatedAt`.
+
+Task rewards are server-defined by stored difficulty: easy 10, medium 25, hard 50, and epic 100 XP. Completion appends a positive transaction; reopen appends a negative reversal and never edits or deletes the original. `UserProgress.currentLevel` uses cumulative thresholds where level N requires an additional `100 × N` XP to reach the next level.
 
 ### FocusSession
 

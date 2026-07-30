@@ -154,7 +154,7 @@ Supabase provides authentication. Sessions use server-managed cookies refreshed 
 
 ## Current milestone
 
-Authenticated-shell phase: the responsive application frame and placeholder product routes are established on top of server-verified Supabase authentication. Planner services, APIs, persistence, and domain automation have not been implemented.
+Task-backend phase: secure authenticated task and category APIs now connect the domain foundation to transactional application services. The Today interface remains a placeholder; recurrence, streaks, achievements, focus behavior, and analytics remain unimplemented.
 
 ## Completed work
 
@@ -169,14 +169,17 @@ Authenticated-shell phase: the responsive application frame and placeholder prod
 - Authenticated dashboard shell established with desktop and mobile navigation, top bar, secure user menu, loading and error states
 - Placeholder routes established for today, week, missions, focus, achievements, analytics, and settings
 - Shared typed navigation, responsive styling, keyboard support, reduced-motion handling, and route-level shell tests added
+- Strict task and category request validation, public response mapping, and stable request-ID-aware API errors established
+- User-scoped task CRUD, date moves, reorder, category listing/creation, completion, reopen, XP ledger, and progress updates implemented through service and repository layers
+- Deterministic XP rewards and cumulative level calculation isolated and covered at boundary values
 
 ## Immediate next steps
 
-1. Implement the authenticated task application service and API layer with ownership checks, validation, and transactional writes.
-2. Define and test the shared user-local date and integer-time conversion utilities before planner persistence is connected.
-3. Specify recurrence, XP reversal, streak, achievement, and focus-session behavior with testable examples.
-4. Connect the Today shell to task queries and mutations through the service layer without placing domain logic in route handlers.
-5. Validate keyboard, screen-reader, responsive, and authentication behavior against the deployed Supabase environment.
+1. Build the interactive Today planner UI against the authenticated task API with accessible loading, empty, validation, and optimistic-feedback states.
+2. Add category selection and task scheduling controls using the documented local-date and integer-minute conventions.
+3. Validate the task API and Today journey against a controlled Supabase environment, including concurrent completion requests.
+4. Specify recurrence, streak, achievement, and focus-session behavior with testable examples before implementing those services.
+5. Replace process-local mutation limiting with a distributed adapter before horizontally scaled deployment.
 
 ## Risks and architectural decisions
 
