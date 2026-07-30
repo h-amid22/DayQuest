@@ -1,68 +1,82 @@
-# Next.js Prisma Supabase Starter
+# DayQuest
 
-A strict, production-oriented starting point for Next.js App Router applications using Prisma 7, PostgreSQL, and optional Supabase authentication.
+> Plan your day. Complete your missions. Level up your life.
 
-## Requirements
+DayQuest is a gamified, highly interactive day planner that helps people organise their time, follow through on meaningful work, and understand their progress. Daily tasks become missions, focused effort builds momentum, and completion earns visible rewards without compromising the clarity expected from a professional planning tool.
+
+## Project status
+
+DayQuest is currently in the **foundation phase**. The repository provides the production-oriented application foundation, authentication examples, database tooling, tests, and security baseline. Planner functionality and its domain schema have not been implemented yet.
+
+## Planned features
+
+- Daily timeline and mission planning
+- Weekly planning
+- Task creation, organisation, completion, and recurring tasks
+- XP, levels, streaks, and achievements
+- Focus sessions
+- Daily and weekly progress analytics
+- Personal settings and accessibility preferences
+- Secure authentication and protected user experiences
+
+## Technology stack
+
+- Next.js 15 App Router and React 19
+- TypeScript in strict mode
+- Prisma 7 with PostgreSQL
+- Supabase authentication
+- Zod validation
+- ESLint
+- Vitest and Testing Library
+- GitHub Actions continuous integration
+
+## Local development
+
+Requirements:
 
 - Node.js 20.19 or newer
-- PostgreSQL (a Supabase database works)
-- A Supabase project when using the authentication examples
+- npm
+- PostgreSQL (a Supabase database is supported)
+- A Supabase project to validate the included authentication examples
 
-## Setup
+Set up and start the application:
 
 ```bash
-cp .env.example .env
+cp .env.example .env.local
 npm install
 npm run db:migrate
 npm run dev
 ```
 
-Open `http://localhost:3000`. Check `GET /api/health` for a JSON health response.
+Open `http://localhost:3000`. The health endpoint is available at `GET /api/health`.
 
-## Environment
+## Environment setup
 
-| Variable | Purpose | Required |
-| --- | --- | --- |
-| `DATABASE_URL` | Pooled application PostgreSQL connection | Yes |
-| `DIRECT_URL` | Direct connection for migrations and seeds | Yes |
-| `NEXT_PUBLIC_SUPABASE_URL` | Public Supabase project URL | For auth |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public Supabase anonymous key | For auth |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server-only administrative client | No |
-| `LOG_LEVEL` | `debug`, `info`, `warn`, or `error` | No |
+Use `.env.example` as the sole reference for required and optional configuration. Copy it to a local environment file, supply your own development credentials, and never place secrets in source code. Public Supabase values are used by the authentication examples; administrative credentials must remain server-only.
 
-Never expose `SUPABASE_SERVICE_ROLE_KEY` to the browser or commit `.env`.
+## Available npm scripts
 
-## Prisma
+| Script | Purpose |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run start` | Run the production server |
+| `npm run lint` | Run ESLint |
+| `npm run typecheck` | Check TypeScript types |
+| `npm test` | Run the test suite once |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run db:generate` | Generate the Prisma client |
+| `npm run db:migrate` | Create and apply a development migration |
+| `npm run db:deploy` | Apply migrations in a deployment environment |
+| `npm run db:seed` | Seed development data |
+| `npm run db:studio` | Open Prisma Studio |
 
-```bash
-npm run db:generate
-npm run db:migrate
-npm run db:deploy
-npm run db:seed
-npm run db:studio
-```
+## Security
 
-The client is generated into `generated/prisma` during `postinstall`, so generated files are not committed. Runtime queries should import `db` from `@/lib/db`. The development seed creates `developer@example.test` in the application database; it does not create a Supabase Auth identity.
+DayQuest uses centrally applied security headers, server-managed Supabase session cookies, server-side identity verification, trusted role metadata, validated configuration and request payloads, stable public API errors, secret-aware logging, and a server-only optional service-role client.
 
-## Supabase authentication
+Before launch, deployment owners must configure approved authentication redirects and row-level security, adopt distributed rate limiting for horizontally scaled deployments, define the final Content Security Policy, and enable dependency scanning. See [Security](docs/SECURITY.md) for the authoritative baseline.
 
-Set the project URL and anonymous key, enable email/password authentication, and create a test identity in Supabase. `/login`, `/protected`, and `/api/protected` demonstrate server-side login, logout, session verification, and access to a current user.
+Never commit environment files, generated folders, build output, or local credentials. In particular, keep `.env`, `.env.local`, `.env.*.local`, `generated/prisma`, `.next`, and `node_modules` out of version control. Keep `.env.example` committed and free of secrets so it remains the canonical setup template.
 
-Roles are `USER`, `MANAGER`, and `ADMIN`, read from the authenticated user's trusted `app_metadata.role`. Assign privileged roles only through a trusted server or the Supabase dashboard. Configure row-level security separately for every exposed Supabase table.
-
-## Quality checks
-
-```bash
-npm run lint
-npm run typecheck
-npm test
-npm run build
-```
-
-GitHub Actions runs the same checks for pushes and pull requests.
-
-## Deployment
-
-Provide all required environment variables on the deployment platform, run `npm run db:deploy` as a controlled release step, and run `npm run build`. The included rate limiter is process-local; replace it with a distributed adapter when deploying multiple instances. The admin Supabase client remains unavailable unless its optional service-role key is configured.
-
-See [architecture](docs/ARCHITECTURE.md), [security](docs/SECURITY.md), and [project context](PROJECTCONTEXT.md).
+Additional documentation is available in [Architecture](docs/ARCHITECTURE.md) and [Project context](PROJECTCONTEXT.md).

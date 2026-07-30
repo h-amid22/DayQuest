@@ -1,8 +1,10 @@
-node_modules
+node_modules/
+.next/
 .env
-/generated
+.env.local
+.env.*.local
+generated/prisma/
 .DS_Store
-.next
 coverage
 *.tsbuildinfo
 .vercel
