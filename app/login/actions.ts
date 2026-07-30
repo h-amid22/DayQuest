@@ -12,7 +12,7 @@ export async function login(formData: FormData) {
   const supabase = await createServerSupabaseClient();
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
   if (error) redirect("/login?error=Unable+to+sign+in");
-  redirect("/protected");
+  redirect("/today");
 }
 
-export async function logout() { const supabase = await createServerSupabaseClient(); await supabase.auth.signOut(); redirect("/"); }
+export async function logout() { const supabase = await createServerSupabaseClient(); await supabase.auth.signOut(); redirect("/login"); }

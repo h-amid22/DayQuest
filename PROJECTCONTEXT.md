@@ -154,7 +154,7 @@ Supabase provides authentication. Sessions use server-managed cookies refreshed 
 
 ## Current milestone
 
-Domain-foundation phase: the initial planner, progression, focus, and achievement schema is defined and documented while authentication examples remain unchanged. APIs, planner interfaces, and domain automation have not been implemented.
+Authenticated-shell phase: the responsive application frame and placeholder product routes are established on top of server-verified Supabase authentication. Planner services, APIs, persistence, and domain automation have not been implemented.
 
 ## Completed work
 
@@ -166,14 +166,17 @@ Domain-foundation phase: the initial planner, progression, focus, and achievemen
 - Initial Prisma domain models and enums established for profiles, plans, tasks, recurrence, focus, XP, streak summaries, and achievements
 - Idempotent system-achievement seed data defined without fake users or Supabase dependencies
 - Database date/time conventions, indexes, uniqueness, history preservation, and deletion behavior documented
+- Authenticated dashboard shell established with desktop and mobile navigation, top bar, secure user menu, loading and error states
+- Placeholder routes established for today, week, missions, focus, achievements, analytics, and settings
+- Shared typed navigation, responsive styling, keyboard support, reduced-motion handling, and route-level shell tests added
 
 ## Immediate next steps
 
-1. Review and apply the domain-foundation migration to each controlled environment.
-2. Validate authentication redirects, cookie handling, protected routes, role behaviour, and user-profile provisioning in the target Supabase environment.
-3. Specify time-zone conversion, recurrence, XP reversal, streak, achievement, and focus-session behavior with testable examples.
-4. Implement authenticated daily-planning services and API contracts with ownership checks and transactional writes.
-5. Build the accessible daily-planning interface as the first vertical slice, then expand toward weekly planning and progression.
+1. Implement the authenticated task application service and API layer with ownership checks, validation, and transactional writes.
+2. Define and test the shared user-local date and integer-time conversion utilities before planner persistence is connected.
+3. Specify recurrence, XP reversal, streak, achievement, and focus-session behavior with testable examples.
+4. Connect the Today shell to task queries and mutations through the service layer without placing domain logic in route handlers.
+5. Validate keyboard, screen-reader, responsive, and authentication behavior against the deployed Supabase environment.
 
 ## Risks and architectural decisions
 
