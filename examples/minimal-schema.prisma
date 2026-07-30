@@ -1,0 +1,15 @@
+model Organization {
+  id        String       @id @default(uuid())
+  name      String
+  members   Membership[]
+  createdAt DateTime     @default(now())
+}
+
+model Membership {
+  id             String       @id @default(uuid())
+  email          String
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, email])
+}
